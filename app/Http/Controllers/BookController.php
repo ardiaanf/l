@@ -30,6 +30,7 @@ class BookController extends Controller
     public function create()
     {
         //
+        return view('buku.create');
     }
 
     /**
@@ -41,6 +42,23 @@ class BookController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'required',
+            'penerbit' => 'required',
+            'cover_img' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        ]);
+
+        $path = $request->file('cover_img')->store('public/images');
+        $post = new Book;
+        $post->name = $request->name;
+        $post->description = $request->description;
+        $post->penerbit = $request->penerbit;
+        $post->cover_img = $path;
+        $post->save();
+
+        return redirect()->route('buku.index')
+                        ->with('success','Book has been created successfully.');
     }
 
     /**
@@ -86,5 +104,8 @@ class BookController extends Controller
     public function destroy($id)
     {
         //
+        $posts = Book::where('id', $id);
+        $posts->Delete();
+        return redirect()->route('buku.index')->with('error', 'Data buku berhasil dihapus');
     }
 }

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\data;
 
 use App\Http\Controllers\Controller;
+use App\Models\Book;
+use App\Models\Mahasiswa;
 use App\Models\Peminjaman;
 use Composer\DependencyResolver\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransaksiController extends Controller
 {
@@ -18,7 +21,7 @@ class TransaksiController extends Controller
     {
         //
         //get posts
-        $posts = Peminjaman::latest()->paginate(5);
+        $posts = Peminjaman::orderBy('id','ASC')->paginate(5);
 
         //render view with posts
         return view('transaksi.index', compact('posts'));
@@ -32,6 +35,10 @@ class TransaksiController extends Controller
     public function create()
     {
         //
+
+        $buku = Book::all();
+        $mahasiswa = Mahasiswa::all();
+        return view('transaksi.create', compact('buku','mahasiswa'));
     }
 
     /**
@@ -43,6 +50,32 @@ class TransaksiController extends Controller
     public function store(Request $request)
     {
         //
+        // $search = $request->kelas_id;
+
+        // if($search == ''){
+        //     $kelas = Book::select('name')->limit(5)->get();
+        // } else{
+        //     $kelas = Book::select('name')->where('name', 'like', '%' .$search . '%')->limit(5)->get();
+        // }
+
+        // $post = array();
+        // $this->post = Book::where('id', $this->id_buku)->get();
+
+        $request->validate([
+            'id_buku' => 'required|max:255',
+            'tgl_pinjam' => 'required',
+            'tgl_kembali' => 'required'
+        ]);
+        $post = new Peminjaman;
+        $post->id_buku = $request->id_buku;
+        $post->tgl_pinjam = $request->tgl_pinjam;
+        $post->tgl_kembali = $request->tgl_kembali;
+        $post->save();
+
+        return redirect()->route('transaksi.index')
+                        ->with('success','Peminjaman buku sukses');
+
+
     }
 
     /**

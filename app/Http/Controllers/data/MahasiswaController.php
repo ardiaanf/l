@@ -87,5 +87,13 @@ class MahasiswaController extends Controller
     public function destroy($id)
     {
         //
+        $posts = Mahasiswa::where('id', $id);
+        $posts->Delete();
+        return redirect()->route('mahasiswa.index')->with('error', 'Data Mahasiswa berhasil dihapus');
+
+        // $posts->delete();
+
+        // return redirect()->route('posts.index')
+        //                 ->with('success','Post has been deleted successfully');
     }
 }

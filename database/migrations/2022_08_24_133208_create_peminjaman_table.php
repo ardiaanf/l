@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('peminjaman', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('id_mahasiswa');
             $table->integer('id_buku');
             $table->date('tgl_pinjam');
