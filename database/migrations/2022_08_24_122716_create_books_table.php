@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('description');
             $table->string('penerbit');
             $table->string('cover_img', 50);
-            $table->integer('stock');
             $table->timestamps();
         });
     }
