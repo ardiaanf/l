@@ -61,6 +61,7 @@ class TransaksiController extends Controller
         // $post = array();
         // $this->post = Book::where('id', $this->id_buku)->get();
 
+
         $request->validate([
             'id_buku' => 'required|max:255',
             'tgl_pinjam' => 'required',
